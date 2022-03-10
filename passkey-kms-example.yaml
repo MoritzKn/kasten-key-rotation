@@ -1,0 +1,7 @@
+apiVersion: vault.kio.kasten.io/v1alpha1
+kind: Passkey
+metadata:
+  name: kmsKey_v0
+spec:
+  awscmkkeyid: arn:aws:kms:eu-central-1:554320077872:key/1afc25f6-0293-4aff-ac85-d7a276de0225
+  usenow: true

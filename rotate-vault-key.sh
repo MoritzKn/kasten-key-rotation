@@ -75,8 +75,8 @@ vault_key_latest_version=$($vault_cmd read $vault_transit_path/keys/$vault_key_n
 echo "* New version is: $vault_key_latest_version"
 
 passkey_name_new=
-if echo $passkey_name_old | grep -E -- '_v\d*' > /dev/null; then
-    last_version=$(echo $passkey_name_old | grep -o -E -- '_v\d*')
+if echo $passkey_name_old | grep -E -- '_v[0-9]+' > /dev/null; then
+    last_version=$(echo $passkey_name_old | grep -o -E -- '_v[0-9]+')
     new_version="_v$vault_key_latest_version"
     passkey_name_new=$(echo $passkey_name_old | sed "s/$(escape_sed $last_version)/$(escape_sed $new_version)"/)
 else
