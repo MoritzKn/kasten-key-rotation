@@ -94,6 +94,12 @@ new_passkey_file="$(mktemp)"
 log_cmd_pipe sed "s/$(escape_sed $passkey_kms_key_id)/$(escape_sed $new_passkey_kms_key_id)/" $passkey_file > $new_passkey_file
 log_cmd mv $new_passkey_file $passkey_file
 
+echo "* Updating alias..."
+alias_name=$(log_cmd_pipe aws kms list-aliases --key-id $kms_key_id | jq .Aliases[0].AliasName -r)
+if [ "$alias_name" != "null" ]; then
+    log_cmd aws kms update-alias --alias-name $alias_name --target-key-id $new_kms_key_id
+fi
+
 echo "* Updating Passkey..."
 log_cmd kubectl create -f $passkey_file
 
@@ -115,12 +121,6 @@ rm $status_file_temp
 if [ "$passkey_is_inuse" != "true" ]; then
     echo " - Error: Passkey '$passkey_name_new' still not active after 5 tries"
     exit 1
-fi
-
-echo "* Updating alias..."
-alias_name=$(log_cmd_pipe aws kms list-aliases --key-id $kms_key_id | jq .Aliases[0].AliasName -r)
-if [ "$alias_name" != "null" ]; then
-    log_cmd aws kms update-alias --alias-name $alias_name --target-key-id $new_kms_key_id
 fi
 
 echo "* Scheduling deletion of old KMS key"
