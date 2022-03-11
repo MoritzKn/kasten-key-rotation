@@ -6,6 +6,9 @@ Scripts for automating key rotation in Kasten K10.
 
 See the [Kasten docs](https://docs.kasten.io/latest/install/configure.html#hashicorp-vault-transit-secrets-engine) on how to setup encryption using Vault in Kasten and the [Vault docs on key rotation in the Transit Secret Engine](https://learn.hashicorp.com/tutorials/vault/eaas-transit#rotate-the-encryption-key).
 
+Make sure the Kasten Vault token has a policy that allows access to the Vault key.
+See: [vault-kasten-policy-example.hcl](./vault-kasten-policy-example.hcl)
+
 If you want to rotate the Vault key used in Kasten, you have to follow a three step process:
 
 1. Create a new version of the key in Vault (i.e. trigger the `/rotate` API)
@@ -36,6 +39,11 @@ export VAULT_CMD="kubectl --context vault-cluster-context -n vault exec -i vault
 ## KMS
 
 See the [Kasten docs](https://docs.kasten.io/latest/install/configure.html#aws-customer-managed-keys) on how to setup encryption using KMS in Kasten and the [AWS docs on manual key rotation](https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html#rotate-keys-manually).
+
+Make sure the Kasten has access to the KMS key. See:
+
+- [kasten-iam-user-policy-example.json](./kasten-iam-user-policy-example.json)
+- [kms-key-policy-example.json](./kms-key-policy-example.json)
 
 If you want to rotate the KMS key used in Kasten, you have to follow a three step process:
 
